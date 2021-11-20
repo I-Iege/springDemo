@@ -4,10 +4,12 @@ import com.hege.springDemo.data.Meeting
 import com.hege.springDemo.business.MeetingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/meetings")
+@Component
 class MeetingController {
     @Autowired
     private lateinit var meetingService: MeetingService

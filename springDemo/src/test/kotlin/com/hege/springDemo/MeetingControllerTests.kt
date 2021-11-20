@@ -47,27 +47,27 @@ internal class MeetingControllerTest {
 
     @Test
     fun testGetAllMeetings() {
-        mockMvc.perform(get("/meetings/read")
+        mockMvc.perform(get("/meetings")
             .header("X-AUTHENTICATED-USER","user1"))
             .andExpect(status().isOk)
     }
 
     @Test
     fun testGetMeeting() {
-        mockMvc.perform(get("/meetings/read/test")
+        mockMvc.perform(get("/meetings/test")
             .header("X-AUTHENTICATED-USER","user1"))
             .andExpect(status().isFound)
     }
 
     @Test
     fun testGetNotExistingMeeting() {
-        mockMvc.perform(get("/meetings/read/0")
+        mockMvc.perform(get("/meetings/0")
             .header("X-AUTHENTICATED-USER","user1"))
             .andExpect(status().isNotFound)
     }
     @Test
     fun testCreateMeeting() {
-        mockMvc.perform(post("/meetings/create")
+        mockMvc.perform(post("/meetings")
             .contentType(contentType)
             .content(jsonMeeting)
         )
@@ -76,7 +76,7 @@ internal class MeetingControllerTest {
 
     @Test
     fun testUpdateMeeting() {
-        mockMvc.perform(post("/meetings/update")
+        mockMvc.perform(put("/meetings")
             .header("X-AUTHENTICATED-USER","user1")
             .contentType(contentType)
             .content(jsonMeeting)
@@ -85,7 +85,7 @@ internal class MeetingControllerTest {
     }
     @Test
     fun testDeleteMeeting() {
-        mockMvc.perform(delete("/meetings/delete/test")
+        mockMvc.perform(delete("/meetings/test")
             .header("X-AUTHENTICATED-USER","user1")
         )
             .andExpect(status().isOk)
@@ -93,7 +93,7 @@ internal class MeetingControllerTest {
 
     @Test
     fun testReadMeetingWithState() {
-        mockMvc.perform(get("/meetings/readwithstate/false")
+        mockMvc.perform(get("/meetings/state/false")
             .header("X-AUTHENTICATED-USER","user1")
         )
             .andExpect(status().isOk)

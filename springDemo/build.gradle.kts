@@ -23,7 +23,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:$springVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-rest:$springVersion")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb:$springVersion")
+	implementation("org.springframework.boot:spring-boot-starter-aop:$springVersion")
 	developmentOnly("org.springframework.boot:spring-boot-devtools:$springVersion")
+	runtimeOnly("org.aspectj:aspectjrt:1.9.7")
+	implementation("org.aspectj:aspectjweaver:1.9.7")
+
 
 	//kotlin
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
