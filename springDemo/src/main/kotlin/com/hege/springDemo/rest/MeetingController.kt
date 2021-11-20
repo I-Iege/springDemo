@@ -12,17 +12,17 @@ class MeetingController {
     @Autowired
     private lateinit var meetingService: MeetingService
 
-    @GetMapping(value = ["/read"])
+    @GetMapping(value = [""])
     fun getAllMeetings(@RequestHeader("X-AUTHENTICATED-USER") username: String): List<Meeting> {
         return meetingService.getAllMeetings(username)
     }
 
-    @GetMapping(value = ["/readwithstate/{state}"])
+    @GetMapping(value = ["/state/{state}"])
     fun getMeetingsWithState(@RequestHeader("X-AUTHENTICATED-USER") username: String, closed: Boolean): List<Meeting> {
         return meetingService.getMeetingsWithState(username, closed)
     }
 
-    @GetMapping(value = ["/read/{meetingId}"])
+    @GetMapping(value = ["/{meetingId}"])
     @ResponseStatus(HttpStatus.FOUND)
     fun getMeetingById(
         @RequestHeader("X-AUTHENTICATED-USER") username: String,
@@ -31,18 +31,18 @@ class MeetingController {
         return meetingService.getMeetingById(username, meetingId)
     }
 
-    @PostMapping(value = ["/create"])
+    @PostMapping(value = [""])
     @ResponseStatus(HttpStatus.CREATED)
     fun createMeeting(@RequestBody meeting: Meeting): Meeting {
         return meetingService.createMeeting(meeting)
     }
 
-    @PostMapping(value = ["/update"])
+    @PutMapping(value = [""])
     fun updateMeeting(@RequestHeader("X-AUTHENTICATED-USER") username: String, @RequestBody meeting: Meeting): Meeting {
         return meetingService.updateMeeting(username, meeting)
     }
 
-    @DeleteMapping(value = ["/delete/{meetingId}"])
+    @DeleteMapping(value = ["/{meetingId}"])
     fun deleteMeeting(@RequestHeader("X-AUTHENTICATED-USER") username: String, @PathVariable meetingId: String) {
         meetingService.deleteMeeting(username, meetingId)
     }
