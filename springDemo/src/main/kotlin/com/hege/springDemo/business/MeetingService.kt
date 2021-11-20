@@ -13,15 +13,15 @@ class MeetingService {
     @Autowired
     private lateinit var meetingRepository: MeetingRepository
 
-    private fun findMeeting(username: String, id : String) : Meeting? {
-       val meeting = meetingRepository.findMeetingById(id)
-        if(meeting != null && meeting.participants.none { it.username == username }) {
+    private fun findMeeting(username: String, id: String): Meeting? {
+        val meeting = meetingRepository.findMeetingById(id)
+        if (meeting != null && meeting.participants.none { it.username == username }) {
             throw DataRetrievalFailureException("Permission Denied")
         }
         return meeting
     }
 
-    fun getAllMeetings(username : String): List<Meeting> {
+    fun getAllMeetings(username: String): List<Meeting> {
         return meetingRepository
             .findMeetingByParticipantsUsername(username);
     }
@@ -59,7 +59,7 @@ class MeetingService {
         meetingRepository.save(meeting)
     }
 
-    fun getMeetingsWithState(username: String, closed : Boolean): List<Meeting> {
+    fun getMeetingsWithState(username: String, closed: Boolean): List<Meeting> {
         return meetingRepository.findMeetingByParticipantsUsernameAndClosed(username, closed)
     }
 }

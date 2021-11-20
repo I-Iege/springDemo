@@ -34,6 +34,7 @@ internal class MeetingControllerTest {
     @BeforeEach
     fun init() {
         meeting = Meeting("test", listOf(), Date(),"","")
+        meeting.id = "0"
         val objectMapper = ObjectMapper()
         jsonMeeting = objectMapper.writeValueAsString(meeting)
         `when`(service.getAllMeetings("user1")).thenReturn(listOf())

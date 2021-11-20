@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.DataRetrievalFailureException
 import java.util.*
+import kotlin.time.measureTime
 
 @SpringBootTest
 class MeetingServiceTests {
@@ -28,29 +29,29 @@ class MeetingServiceTests {
     @Test
     fun testCloseMeetings() {
         val meeting =  Meeting("1on1", listOf(Participant("user1","user1")), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting.title)).thenReturn(meeting)
+        meeting.id = "0"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting.id)).thenReturn(meeting)
 
         assertThrows<DataRetrievalFailureException> {
             service.closeMeeting("user2", meeting.title)
         }
 
-        service.closeMeeting("user1", meeting.title)
+        service.closeMeeting("user1", meeting.id)
         assert(meeting.closed)
 
         assertThrows<DataIntegrityViolationException> {
-            service.closeMeeting("user1", meeting.title)
+            service.closeMeeting("user1", meeting.id)
         }
     }
 
     @Test
     fun testCreateMeeting(){
        val meeting = Meeting("1on1", listOf(), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting.title)).thenReturn(meeting)
-        assertThrows<DataIntegrityViolationException> {
-            service.createMeeting(meeting)
-        }
+        meeting.id="0"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting.id)).thenReturn(meeting)
         val meeting2 = Meeting("second1on1", listOf(), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting2.title)).thenReturn(null)
+        meeting2.id="1"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting2.id)).thenReturn(null)
 
         var saveCalled = false
         Mockito.`when`(meetingRepository.save(meeting2)).then{
@@ -66,11 +67,13 @@ class MeetingServiceTests {
     @Test
     fun testUpdateMeeting(){
         val meeting =  Meeting("1on1", listOf(Participant("john","John Doe")), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting.title)).thenReturn(meeting)
+        meeting.id = "0"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting.id)).thenReturn(meeting)
         val meeting2 = Meeting("1on1", listOf(
             Participant("john","John Doe"),
             Participant("jane","Jane Doe")
         ), Date(),"","")
+        meeting2.id = "1"
         Mockito.`when`(meetingRepository.save(meeting2)).then {
             meeting.participants = meeting2.participants
             meeting
@@ -92,38 +95,41 @@ class MeetingServiceTests {
     @Test
     fun testDeleteMeeting() {
         val meeting =  Meeting("1on1", listOf(Participant("john","John Doe")), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting.title)).thenReturn(meeting)
+        meeting.id ="0"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting.id)).thenReturn(meeting)
 
         assertThrows<DataRetrievalFailureException> {
-            service.deleteMeeting("jack",meeting.title)
+            service.deleteMeeting("jack",meeting.id)
         }
         var deleteCalled = false;
-        Mockito.`when`(meetingRepository.deleteById(meeting.title))
+        Mockito.`when`(meetingRepository.deleteById(meeting.id))
             .then {
                 deleteCalled = true
                 meeting
             }
-        service.deleteMeeting("john",meeting.title)
+        service.deleteMeeting("john",meeting.id)
         assert(deleteCalled)
     }
 
     @Test
     fun testFindMeetingById() {
         val meeting =  Meeting("1on1", listOf(Participant("john","John Doe")), Date(),"","")
+        meeting.id = "0"
         val meeting2 =  Meeting("second1on1", listOf(Participant("jane","Jane Doe")), Date(),"","")
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting.title)).thenReturn(meeting)
-        Mockito.`when`(meetingRepository.findMeetingByTitle(meeting2.title)).thenReturn(meeting2)
+        meeting2.id = "1"
+        Mockito.`when`(meetingRepository.findMeetingById(meeting.id)).thenReturn(meeting)
+        Mockito.`when`(meetingRepository.findMeetingById(meeting2.id)).thenReturn(meeting2)
 
         assertThrows<DataRetrievalFailureException> {
-            service.getMeetingById("jack",meeting.title)
+            service.getMeetingById("jack",meeting.id)
         }
         assertThrows<DataRetrievalFailureException> {
-            service.getMeetingById("john",meeting2.title)
+            service.getMeetingById("john",meeting2.id)
         }
 
         assertDoesNotThrow {
-            service.getMeetingById("john",meeting.title)
-            service.getMeetingById("jane",meeting2.title)
+            service.getMeetingById("john",meeting.id)
+            service.getMeetingById("jane",meeting2.id)
         }
 
     }
