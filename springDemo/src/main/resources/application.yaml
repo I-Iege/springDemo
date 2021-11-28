@@ -3,7 +3,7 @@ spring:
     driver-class-name: mongodb.jdbc.MongoDriver
   data:
     mongodb:
-      uri: mongodb://localhost:27017/testDb
+      uri: mongodb://${DB_ADDRESS}:27017/testDb
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
     

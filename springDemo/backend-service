@@ -1,0 +1,5 @@
+FROM alpine
+RUN apk add gradle
+COPY . .
+CMD gradle build
+CMD gradle bootRun

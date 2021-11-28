@@ -1,0 +1,14 @@
+services:
+  db-service:
+    image: mongo
+  backend-service:
+    build: 
+      context: ./springDemo
+      dockerfile: backend-service
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./springDemo:/springDemo
+      
